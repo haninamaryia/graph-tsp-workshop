@@ -70,12 +70,6 @@ class EdgeTree:
             self.root = Edge(city1, city2, distance)
             return True
 
-    def findMin(self):
-        current = self.root
-        while current.leftChild:
-            current = current.leftChild
-        return current.value
-
     def DFS(self, root):
         if not root:
             return False
@@ -139,26 +133,6 @@ class Graph:
     def __iter__(self):
         return iter(self.vertList.values())
 
-    ### IMPLEMENT get_continent_shortest_path() HERE ###
-    # https://www.youtube.com/watch?v=CL1byLngb5Q
-
-    # A utility function to find the vertex with
-    # minimum distance value, from the set of vertices
-    # not yet included in shortest path tree
-    def minDistance(self, dist, sptSet):
-
-        # Initilaize minimum distance for next node
-        min = np.Infinity
-
-        # Search not nearest vertex not in the
-        # shortest path tree
-        for v in range(self.V):
-            if dist[v] < min and sptSet[v] == False:
-                min = dist[v]
-                min_index = v
-
-        return min_index
-
     def dijkstra(self, src, dest):
 
         assert src in self.vertList, 'Such source node doesn\'t exist'
@@ -204,13 +178,11 @@ class Graph:
         return path
 
 
-    ### IMPLEMENT get_tsp_tour() HERE ###
-    def two_apt(self, tour):
+    def two_opt(self, tour):
         pass
 
-    # def checkPath(self, path):
-    #     edges = dict()
-    #     for edge in path:
+    def is_path_complete(self, path):
+        pass
 
 
     def greedyTSP(self):
@@ -230,7 +202,7 @@ class Graph:
         path = []
         length = 0
 
-        sorted_edges = edgeTree.DFS(edgeTree.root)
+        edgeTree.DFS(edgeTree.root)
 
         for edge in edgeTree.sortedEdges:
 
@@ -258,7 +230,7 @@ class Graph:
 
             elif v1.visitedOnce is True and v2.visitedOnce is False:
                 v1.visitedTwice = True
-                v2.visitedOnce= True
+                v2.visitedOnce = True
                 path.append(edge)
                 length = length + abs(self.getDistance(edge['city1'],
                                                     edge['city2']))
@@ -270,11 +242,6 @@ class Graph:
                 length = length + abs(self.getDistance(edge['city1'],
                                                     edge['city2']))
 
-
-        print('ok')
-        #
-
-        pass
 
 
 if __name__ == '__main__':
@@ -299,8 +266,4 @@ if __name__ == '__main__':
                     capitalsGraph.addEdge(v1, v2, dist)
                     capitalsGraph.addEdge(v2, v1, dist)
 
-    # Find TSP path for all cities
-    #print(capitalsGraph.dijkstra('Minsk', 'Ottawa'))
-
     capitalsGraph.greedyTSP()
-
